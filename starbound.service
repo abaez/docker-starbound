@@ -1,0 +1,18 @@
+[Unit]
+Description=Starbound server container
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=%u
+Restart=on-failure
+RestartSec=10
+ExecStartPre=-/usr/bin/docker kill starbound
+ExecStartPre=-/usr/bin/docker rm starbound
+ExecStart=/usr/bin/docker run -v /srv/starbound:/srv/starbound \
+  -p 21025:21025 -p 21025:21025/udp -p 21026:21026 -p 21026:21026/udp \
+  --name=starbound abaez/starbound
+ExecStop=-/usr/bin/docker stop -t 2 starbound
+
+[Install]
+WantedBy=multi-user.target
