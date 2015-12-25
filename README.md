@@ -8,8 +8,9 @@ A server container for the lovely starbound game. Nothing too fancy.
 
 ### USAGE
 ou can run this container in 2 ways: `docker run` or sytemd unit service file.
-The two methods need both the port you will be using for the container and
-the volume location of the `/srv/starbound` path.
+The two methods need the port you will be using for the container,
+the volume location of the `/srv/starbound` path, and the
+steam.{username, password} for it to work.
 
 #### docker run
 To run using docker, naturally you would use the setup below, with of course
@@ -18,6 +19,7 @@ changing the volume and port location to your liking:
 ```
 docker run -v ./starbound:/srv/starbound \
   -p 21025:21025 -p 21025:21025/udp -p 21026:21026 -p 21026:21026/udp \
+  -e "STEAM_USERNAME=your_username" -e "STEAM_PASSWORD=your_password" \
   --name=starbound abaez/starbound
 ```
 
@@ -25,28 +27,31 @@ docker run -v ./starbound:/srv/starbound \
 If you want to have the docker container running automagically on your
 machine, then this is the place to go.
 
-All you need to do is first copy to your systemd service directory and do a
-quick `daemon-reload`.
+What you need to do is first copy to your systemd service directory and do a
+quick `daemon-reload` for every change you do to the unit file.
 
 ```
 sudo cp <docker-shout source>/starbound.service /usr/lib/systemd/system
 sudo systemctl daemon-reload
 ```
 
-Finally, you can append to your systemd setup by giving the port you
-desire for the service to run under.
+You don't need to declare the user, since it uses the default user of the
+running service. However, if you want to be specific, you can always change
+the user by replacing `%u`, on **line 7** with your user, in the unit file.
+
+Next, unless you want the volume configuration auto mounted to
+`/srv/starbound`,
+change the volume location to whatever desire you may have.
+
+Also, don't forget to change username and password for steam on **line 14**
+
+Finally update your systemd daemon and enable starbound:
 
 ```
+sudo systemctl daemon-reload
 sudo systemctl enable starbound
 ```
 
-You don't need to declare the user, since it uses the default user of the
-running service. However, if you want to be specific, you can always change
-the user by replacing `%u`, on line 8 with your user, in the unit file.
-
-Lastly, unless you want the volume configuration auto mounted to
-`/srv/starbound`,
-change the volume location to whatever desire you may have.
 
 
 ### LICENSE
