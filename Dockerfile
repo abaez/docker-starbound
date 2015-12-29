@@ -21,7 +21,8 @@ RUN curl -s http://media.steampowered.com/client/steamcmd_linux.tar.gz | tar xzv
 
 # make start script
 ADD ./add/start.sh ./start.sh
-RUN chmod +x ./start.sh
+ADD ./add/updater.sh ./updater.sh
+RUN chmod +x ./start.sh ./updater.sh
 
 # Server ports
 EXPOSE 21025
