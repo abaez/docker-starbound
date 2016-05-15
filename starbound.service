@@ -7,6 +7,7 @@ After=docker.service
 User=%u
 Restart=on-failure
 RestartSec=10
+ExecStartPre=-/usr/bin/docker pull abaez/starbound
 ExecStartPre=-/usr/bin/docker kill starbound
 ExecStartPre=-/usr/bin/docker rm starbound
 ExecStart=/usr/bin/docker run -v /srv/starbound:/srv/starbound \
